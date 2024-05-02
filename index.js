@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 // import {ProductRouter} from "./routes/product.js"
-import { Product } from "./models/productModel.js";
+// import { Product } from "./models/productModel.js";
 dotenv.config();
 import mongoose from "mongoose";
 
@@ -13,6 +13,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // app.use("/new", ProductRouter)
+
+const ProductSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
+  category: { type: String, required: true },
+  image: { type: String, required: true },
+  sku: { type: String, required: true }
+});
+
+const Product = mongoose.model("product", ProductSchema);
 
 mongoose
   .connect(`${process.env.URI}`)
@@ -30,6 +41,8 @@ app.listen(process.env.PORT, () => {
 app.get("/", (req, res) => res.send("Hello World!"));
 
 app.get("/dis", (req, res) => res.redirect("https://distrovik.com"));
+
+app.get("/test", (req, res) => res.send("Test Route"));
 
 app.get("/products", (req, res) => {
   Product.find({}).then(function (products) {
